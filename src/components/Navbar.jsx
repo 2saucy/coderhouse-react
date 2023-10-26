@@ -1,28 +1,17 @@
-const Navbar = ({ className }) => {
-  const routes = [{
-    label: "Home",
-    href: "/"
-  },
-  {
-    label: "Products",
-    href: "/products"
-  },
-  {
-    label: "Contact",
-    href: "/contact"
-  }]
+import { ALL_ROUTES as routes } from "../../constants.js";
 
+const Navbar = () => {
   return (
-    <nav className={className}>
-      {routes.map((route, i) => (
-        <a 
-          className="hover:text-black" 
-          href={route.href} 
-          key={i}
-        >
-          {route.label}
-        </a>
-      ))}
+    <nav>
+      <ul className="flex gap-4">
+        {routes.map((route, i) => (
+          <li key={i}>
+            <a className="text-[#64748b] hover:text-black" href={route.href}>
+              {route.label}
+            </a>
+          </li>
+        ))}
+      </ul>
     </nav>
   );
 }

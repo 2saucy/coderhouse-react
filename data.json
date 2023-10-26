@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "Air Force 1",
+    "price": 100
+  },
+  {
+    "id": 2,
+    "name": "Air Force 2",
+    "price": 200
+  },
+  {
+    "id": 3,
+    "name": "Air Force 3",
+    "price": 300
+  },
+  {
+    "id": 4,
+    "name": "Air Force 4",
+    "price": 400
+  }
+]
