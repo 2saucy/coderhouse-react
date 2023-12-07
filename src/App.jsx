@@ -1,33 +1,33 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Header from "./components/layout/Header";
-import Footer from "./components/layout/Footer";
+import Header from "./layout/Header";
+import Footer from "./layout/Footer";
 
-import HomePage from "./components/pages/HomePage";
-import CartPage from "./components/pages/CartPage";
-import CategoryPage from "./components/pages/CategoryPage";
-import ProductDetailPage from "./components/pages/ProductDetailPage";
+import HomePage from "./pages/HomePage";
+import CartPage from "./pages/CartPage";
+import CategoryPage from "./pages/CategoryPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import CheckoutPage from "./pages/CheckoutPage";
+
+import { CartProvider } from "./context/CartContext";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route exact path="/" element={<HomePage />} />
-          <Route
-            exact
-            path="/category/:categoryName"
-            element={<CategoryPage />}
-          />
-          <Route
-            exact
-            path="/product/:productId"
-            element={<ProductDetailPage />}
-          />
-          <Route path="/cart" element={<CartPage />} />
-        </Routes>
-        <Footer />
+        <CartProvider>
+          <Header />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/category/:categoryName" element={<CategoryPage />} />
+            <Route path="/product/:productId" element={<ProductDetailPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+          <Footer />
+        </CartProvider>
       </BrowserRouter>
     </>
   );

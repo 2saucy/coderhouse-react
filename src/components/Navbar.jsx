@@ -1,41 +1,81 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import Dropdown from "./Dropdown";
+import { capitalizeFirstLetter, generateCategoriesMap } from "../utils/utils";
+import clsx from "clsx";
+import PropTypes from "prop-types";
 
 export default function Navbar() {
-  const [categories, setCategories] = useState([]);
+  const [mainCategories, setMainCategories] = useState([]);
+  const [mapCategories, setMapCategories] = useState([]);
 
   useEffect(() => {
-    fetch("https://fakestoreapi.com/products/categories")
-      .then((res) => res.json())
-      .then((data) => setCategories(data))
-      .catch((err) => console.error(err));
+    generateCategoriesMap()
+      .then((categories) => {
+        const mainCategories = Array.from(categories.keys());
+        setMainCategories(mainCategories);
+        setMapCategories(categories);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
-    <nav className="hidden md:block">
-      <ul className="font-sm flex gap-4 text-black/50">
-        <li>
-          <NavLink
-            to="/"
-            className={({ isActive }) => (isActive ? "text-black" : "")}
-          >
-            Home
-          </NavLink>
-        </li>
-        <li>
-          <Dropdown label={"Categories"} data={categories} />
-        </li>
-        <li>
-          <NavLink
-            to="/contact"
-            className={({ isActive }) => (isActive ? "text-black" : "")}
-            aria-disabled
-          >
-            Contact
-          </NavLink>
-        </li>
-      </ul>
+    <nav className="hidden gap-4 lg:flex">
+      {mainCategories.map((category) => (
+        <Dropdown
+          key={category}
+          category={category}
+          subcategories={Array.from(mapCategories.get(category))}
+        />
+      ))}
     </nav>
   );
 }
+
+function Dropdown({ category, subcategories }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const capitalizedCategory = capitalizeFirstLetter(category);
+
+  return (
+    <div
+      className="relative text-xs"
+      onMouseOver={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
+      <div className="cursor-pointer hover:text-slate-300">
+        {capitalizedCategory}
+      </div>
+      <ul
+        className={clsx(
+          "absolute z-10 flex flex-col gap-4 bg-black p-4",
+          isOpen ? "block" : "hidden",
+        )}
+      >
+        {subcategories.map((subcategory) => {
+          const capitalizedSubCategory = capitalizeFirstLetter(subcategory);
+
+          return (
+            <li
+              key={subcategory}
+              className="whitespace-nowrap"
+              onClick={() => setIsOpen(false)}
+            >
+              <NavLink
+                to={`/category/${subcategory}`}
+                className={({ isActive }) =>
+                  isActive ? "text-slate-500" : "hover:text-slate-300"
+                }
+              >
+                {capitalizedSubCategory}
+              </NavLink>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
+Dropdown.propTypes = {
+  category: PropTypes.string,
+  subcategories: PropTypes.arrayOf(PropTypes.string),
+};
