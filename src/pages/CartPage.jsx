@@ -9,14 +9,12 @@ import { useQuantity } from "../hooks/useQuantity";
 export default function CartPage() {
   const { cart, total } = useContext(CartContext);
 
-  console.log(typeof total);
-
   if (cart.length === 0) {
     return <CartEmpty />;
   }
 
   return (
-    <main className="flex h-full items-start justify-center gap-8 max-lg:flex-col max-md:p-4 md:p-8">
+    <main className="flex min-h-screen items-start justify-center gap-8 max-lg:flex-col max-md:p-4 md:p-8">
       <Cart cart={cart} />
       <Summary total={total} cart={cart} />
     </main>
@@ -49,44 +47,44 @@ function Card({ id, images, title, price, initialQuantity }) {
   }, [quantity]);
 
   return (
-    <div key={id} className="flex flex-col rounded-lg bg-white p-4 shadow-md">
+    <div key={id} className="flex flex-col rounded-lg bg-white p-4 shadow-md hover:shadow-lg transition duration-300">
       <button onClick={() => removeFromCart(id)} className="self-end">
-        <X className="h-4 w-4 text-slate-400 hover:text-slate-900" />
+        <X className="h-4 w-4 text-gray-500 hover:text-gray-700" />
       </button>
       <div className="flex items-center gap-4 max-sm:flex-col">
-        <div className="h-32 w-32">
+        <div className="h-32 w-32 overflow-hidden rounded-lg">
           <img
-            className="h-full w-full object-contain"
+            className="h-full w-full object-cover"
             src={images[0]}
             alt={title + "Image"}
           />
         </div>
-        <div className="space-y-2 self-start">
+        <div className="flex flex-col">
           <Link
-            className="text-xl font-bold hover:underline"
+            className="text-lg font-semibold hover:underline"
             to={`/product/${id}`}
           >
             {title}
           </Link>
-          <div className="flex items-center gap-4">
-            Quantity:
+
+          <div className="flex items-center gap-4 mt-2">
             <div className="flex items-center gap-4">
               <button
-                className="rounded-full p-[1px] duration-150 hover:bg-slate-500/10"
+                className="rounded-full p-1.5 bg-gray-200 hover:bg-gray-300 duration-150"
                 onClick={() => decrement()}
               >
-                <Minus />
+                <Minus className="h-4 w-4 text-gray-500" />
               </button>
-              <span>{quantity}</span>
+              <span className="text-gray-700">{quantity}</span>
               <button
-                className="rounded-full p-[1px] hover:bg-slate-500/10"
+                className="rounded-full p-1.5 bg-gray-200 hover:bg-gray-300"
                 onClick={() => increment()}
               >
-                <Plus />
+                <Plus className="h-4 w-4 text-gray-500" />
               </button>
             </div>
+            <p className="text-gray-600">Unit price: <span className="text-lg font-semibold">${price}</span></p>
           </div>
-          <p>Unit price: ${price}</p>
         </div>
       </div>
     </div>
@@ -95,7 +93,7 @@ function Card({ id, images, title, price, initialQuantity }) {
 
 function CartEmpty() {
   return (
-    <div className="flex h-full items-center justify-center gap-8 bg-slate-100 p-8">
+    <div className="flex flex-col md:flex-row min-h-screen items-center justify-center gap-8 bg-slate-100 p-8">
       <div className="flex justify-center">
         <img className="h-64" src="/empty-cart.png" alt="Empty Cart" />
       </div>
@@ -105,7 +103,7 @@ function CartEmpty() {
           Find some products to add to your cart
         </p>
         <Link className="text-slate-800 hover:underline" to={"/"}>
-          Back to homepage
+          Go home
         </Link>
       </div>
     </div>

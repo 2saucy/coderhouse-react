@@ -9,6 +9,8 @@ import { db } from "../utils/firebaseConfig"
 import { useQuantity } from "../hooks/useQuantity";
 import RatingStars from "../components/RatingStars";
 import { CartContext } from "../context/CartContext";
+import { BounceLoader } from "react-spinners";
+import { getPriceWithoutDiscount } from "../utils/utils";
 
 export default function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
@@ -36,13 +38,17 @@ export default function ProductDetailPage() {
   }, [])
 
   if (loading) {
-    return <p>Loading...</p>
+    return (
+      <main className="min-h-screen flex justify-center items-center">
+        <BounceLoader className="" />
+      </main>
+    )
   }
 
   return (
-    <main className="flex max-lg:flex-col lg:flex-row gap-8 p-8">
-      <div className="basis-1/2 flex flex-col gap-8">
-        <div className="lg:h-[420px]">
+    <main className="min-h-screen flex max-lg:flex-col lg:flex-row gap-8 p-8">
+      <div className="basis-1/2 flex flex-col items-center gap-8">
+        <div className="h-[70vh]">
           <img
             className="h-full w-full object-contain"
             src={activeImg}
@@ -68,8 +74,11 @@ function ProductDetails({ product, productId }) {
     description,
     category,
     price,
-    rating
+    rating,
+    discountPercentage
   } = product
+
+  const priceWithoutDiscount = getPriceWithoutDiscount(price, discountPercentage)
 
   const onClick = () => {
     addToCart(product, quantity);
@@ -78,17 +87,23 @@ function ProductDetails({ product, productId }) {
 
   return (
     <div className="basis-1/2 space-y-4">
-      <h1 className="text-2xl">{title}</h1>
+      <h1 className="text-4xl">{title}</h1>
       <span className="font-serif italic text-slate-700">
         {category}
       </span>
-      <div className="flex items-center gap-4 max-md:flex-col max-md:items-start">
-        <p className="text-4xl font-black tracking-wider">
-          ${price}
-        </p>
-        <div className="flex gap-2">
-          <RatingStars rate={rating} />
-          <p className="text-sm font-semibold">{rating}</p>
+      <div className="flex flex-col">
+        <div className="text-md font-thin text-slate-400">
+          <span className="line-through mr-2">${priceWithoutDiscount}</span>
+          <span className="text-green-500 font-semibold">%{product.discountPercentage} OFF 🌶️</span>
+        </div>
+        <div className="flex items-center gap-4 max-md:flex-col max-md:items-start">
+          <span className="text-4xl font-black tracking-wider">
+            ${price.toFixed(2)}
+          </span>
+          <div className="flex gap-2">
+            <RatingStars rate={rating} />
+            <p className="text-sm font-semibold">{rating}</p>
+          </div>
         </div>
       </div>
       <QuantitySelector increment={increment} decrement={decrement} quantity={quantity} />
@@ -106,7 +121,7 @@ function ImagenGallery({ images, active, setActive }) {
     <div className="flex gap-4">
       {images.map((img, i) => (
         <div onClick={() => setActive(img)} className={clsx(
-          "aspect-square rounded-lg overflow-hidden shadow-md border-2 duration-150 ease-in-out hover:scale-105",
+          "aspect-square h-24 rounded-lg overflow-hidden shadow-md border-2 duration-150 ease-in-out hover:scale-105",
           active === img ? "border-slate-500" : "border-slate-200"
         )} key={i}>
           <img className="h-full w-full object-cover" src={img} />
@@ -121,11 +136,11 @@ function QuantitySelector({ increment, decrement, quantity }) {
     <div className="space-y-2">
       <h3 className="font-bold">Quantity</h3>
       <div className="flex w-fit items-center gap-8 rounded-full px-4 py-2 shadow-md">
-        <button onClick={decrement}>
+        <button onClick={decrement} className="hover:text-slate-500">
           <Minus />
         </button>
         <span>{quantity}</span>
-        <button onClick={increment}>
+        <button onClick={increment} className="hover:text-slate-500">
           <Plus />
         </button>
       </div>
@@ -163,12 +178,13 @@ function AddCartButton({ onClick, isDisabled }) {
 ProductDetails.propTypes = {
   productId: PropTypes.string.isRequired,
   product: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     category: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
-    rating: PropTypes.number.isRequired
+    rating: PropTypes.number.isRequired,
+    discountPercentage: PropTypes.number.isRequired
   }).isRequired
 }
 

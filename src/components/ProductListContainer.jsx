@@ -1,9 +1,11 @@
 import PropTypes from "prop-types";
-import ProductCard from "./ProductCard";
-import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
-export default function ProductListContainer ({ products }) {
+import ProductCard from "./ProductCard";
+
+
+export default function ProductListContainer({ products }) {
   const [searchParams] = useSearchParams();
   const [filtered, setFiltered] = useState(products);
 
@@ -23,7 +25,7 @@ export default function ProductListContainer ({ products }) {
   }, [searchParams, products]);
 
   return (
-    <div className="grid gap-8 p-8 max-sm:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="grid gap-8 max-sm:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {filtered.map(({ id, title, images, price, discountPercentage }, i) => (
         <ProductCard
           key={i}

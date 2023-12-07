@@ -20,7 +20,9 @@ export default function Header() {
         <Navbar />
       </div>
       <div className="flex items-center gap-4 lg:gap-8">
-        <Search />
+        {pathname.includes("category") ? (
+          <Search />
+        ) : null}
         <Link to="/cart">
           <ShoppingCart
             className={clsx(

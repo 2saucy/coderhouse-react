@@ -70,3 +70,8 @@ export const generateCategoriesMap = async () => {
 export const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
+
+export const getPriceWithoutDiscount = (price, discountPercentage) => {
+  return (price / (1 - discountPercentage / 100)).toFixed(2);
+}
+

@@ -49,22 +49,25 @@ export default function HomePage() {
           </div>
         ))}
       </Slider>
-      <section className="space-y-4 px-8">
-        <h2 className="text-3xl font-black uppercase">BIG OFFERS ❤️‍🔥</h2>
+
+      <section className="space-y-4 p-12">
+        <h2 className="text-3xl font-serif italic">Weekly Discounts</h2>
         <ProductListContainer products={bestDiscounts} />
       </section>
-      <section className="bg-black flex">
+
+      <section className="bg-black flex flex-col md:flex-row">
         <div className="basis-1/2">
           <img src="./banner-category-electronics.jpg" alt="Electronics Banner" />
         </div>
-        <div className="basis-1/2 text-white p-8">
+        <div className="basis-1/2 text-slate-100 self-center p-8 space-y-4">
           <h2 className="text-2xl font-bold">Explore our Electronics Deals</h2>
-          <p className="text-lg">
+          <p className="text-lg font-serif">
             Discover amazing discounts on the latest electronics. From smartphones to laptops,
             find the best deals on cutting-edge technology.
           </p>
         </div>
       </section>
+
       <ContactUsSection />
     </main>
   );
@@ -72,7 +75,7 @@ export default function HomePage() {
 
 function ContactUsSection() {
   return (
-    <section className="bg-gray-100 py-12">
+    <section className="bg-gray-100 p-12">
       <div className="container mx-auto">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-4xl font-bold mb-4">Contact Us</h2>
