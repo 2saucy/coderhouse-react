@@ -9,8 +9,7 @@ export default function CategoryPage() {
   const [products, setProducts] = useState([]);
   const { categoryName } = useParams();
   const capitalizedCategoryName = capitalizeFirstLetter(categoryName);
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -39,7 +38,7 @@ export default function CategoryPage() {
   }, [categoryName]);
 
   return (
-    <main className="px-8 py-12 space-y-8 min-h-screen">
+    <main className="min-h-screen space-y-8 px-8 py-12">
       <h1 className="text-4xl font-bold ">{capitalizedCategoryName}</h1>
       <ProductListContainer products={products} />
     </main>

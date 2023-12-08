@@ -47,7 +47,10 @@ function Card({ id, images, title, price, initialQuantity }) {
   }, [quantity]);
 
   return (
-    <div key={id} className="flex flex-col rounded-lg bg-white p-4 shadow-md hover:shadow-lg transition duration-300">
+    <div
+      key={id}
+      className="flex flex-col rounded-lg bg-white p-4 shadow-md transition duration-300 hover:shadow-lg"
+    >
       <button onClick={() => removeFromCart(id)} className="self-end">
         <X className="h-4 w-4 text-gray-500 hover:text-gray-700" />
       </button>
@@ -67,23 +70,26 @@ function Card({ id, images, title, price, initialQuantity }) {
             {title}
           </Link>
 
-          <div className="flex items-center gap-4 mt-2">
+          <div className="mt-2 flex items-center gap-4">
             <div className="flex items-center gap-4">
               <button
-                className="rounded-full p-1.5 bg-gray-200 hover:bg-gray-300 duration-150"
+                className="rounded-full bg-gray-200 p-1.5 duration-150 hover:bg-gray-300"
                 onClick={() => decrement()}
               >
                 <Minus className="h-4 w-4 text-gray-500" />
               </button>
               <span className="text-gray-700">{quantity}</span>
               <button
-                className="rounded-full p-1.5 bg-gray-200 hover:bg-gray-300"
+                className="rounded-full bg-gray-200 p-1.5 hover:bg-gray-300"
                 onClick={() => increment()}
               >
                 <Plus className="h-4 w-4 text-gray-500" />
               </button>
             </div>
-            <p className="text-gray-600">Unit price: <span className="text-lg font-semibold">${price}</span></p>
+            <p className="text-gray-600">
+              Unit price:{" "}
+              <span className="text-lg font-semibold">${price}</span>
+            </p>
           </div>
         </div>
       </div>
@@ -93,7 +99,7 @@ function Card({ id, images, title, price, initialQuantity }) {
 
 function CartEmpty() {
   return (
-    <div className="flex flex-col md:flex-row min-h-screen items-center justify-center gap-8 bg-slate-100 p-8">
+    <div className="flex min-h-screen flex-col items-center justify-center gap-8 bg-slate-100 p-8 md:flex-row">
       <div className="flex justify-center">
         <img className="h-64" src="/empty-cart.png" alt="Empty Cart" />
       </div>

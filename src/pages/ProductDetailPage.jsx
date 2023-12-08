@@ -1,11 +1,11 @@
 import clsx from "clsx";
-import PropTypes from "prop-types"
+import PropTypes from "prop-types";
 import { Plus, Minus, PlusCircle } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs } from "firebase/firestore";
 
-import { db } from "../utils/firebaseConfig"
+import { db } from "../utils/firebaseConfig";
 import { useQuantity } from "../hooks/useQuantity";
 import RatingStars from "../components/RatingStars";
 import { CartContext } from "../context/CartContext";
@@ -20,34 +20,34 @@ export default function ProductDetailPage() {
   const { productId } = useParams();
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
 
     const docRef = collection(db, "products");
 
     const q = query(docRef, where("id", "==", Number(productId)));
 
     getDocs(q)
-      .then(snapshot => {
-        setProduct(snapshot.docs[0].data())
-        setActiveImg(snapshot.docs[0].data().images[0])
+      .then((snapshot) => {
+        setProduct(snapshot.docs[0].data());
+        setActiveImg(snapshot.docs[0].data().images[0]);
       })
-      .catch(err => {
-        console.log(err)
+      .catch((err) => {
+        console.log(err);
       })
-      .finally(() => setLoading(false))
-  }, [])
+      .finally(() => setLoading(false));
+  }, []);
 
   if (loading) {
     return (
-      <main className="min-h-screen flex justify-center items-center">
+      <main className="flex min-h-screen items-center justify-center">
         <BounceLoader className="" />
       </main>
-    )
+    );
   }
 
   return (
-    <main className="min-h-screen flex max-lg:flex-col lg:flex-row gap-8 p-8">
-      <div className="basis-1/2 flex flex-col items-center gap-8">
+    <main className="flex min-h-screen gap-8 p-8 max-lg:flex-col lg:flex-row">
+      <div className="flex basis-1/2 flex-col items-center gap-8">
         <div className="h-[70vh]">
           <img
             className="h-full w-full object-contain"
@@ -55,7 +55,11 @@ export default function ProductDetailPage() {
             alt={product.title + "Image"}
           />
         </div>
-        <ImagenGallery images={product.images} active={activeImg} setActive={setActiveImg} />
+        <ImagenGallery
+          images={product.images}
+          active={activeImg}
+          setActive={setActiveImg}
+        />
       </div>
       <ProductDetails product={product} productId={productId} />
     </main>
@@ -69,32 +73,29 @@ function ProductDetails({ product, productId }) {
 
   const isDisabled = cart.some((product) => product.id === Number(productId));
 
-  const {
-    title,
-    description,
-    category,
-    price,
-    rating,
-    discountPercentage
-  } = product
+  const { title, description, category, price, rating, discountPercentage } =
+    product;
 
-  const priceWithoutDiscount = getPriceWithoutDiscount(price, discountPercentage)
+  const priceWithoutDiscount = getPriceWithoutDiscount(
+    price,
+    discountPercentage,
+  );
 
   const onClick = () => {
     addToCart(product, quantity);
     navigate("/cart");
-  }
+  };
 
   return (
     <div className="basis-1/2 space-y-4">
       <h1 className="text-4xl">{title}</h1>
-      <span className="font-serif italic text-slate-700">
-        {category}
-      </span>
+      <span className="font-serif italic text-slate-700">{category}</span>
       <div className="flex flex-col">
         <div className="text-md font-thin text-slate-400">
-          <span className="line-through mr-2">${priceWithoutDiscount}</span>
-          <span className="text-green-500 font-semibold">%{product.discountPercentage} OFF 🌶️</span>
+          <span className="mr-2 line-through">${priceWithoutDiscount}</span>
+          <span className="font-semibold text-green-500">
+            %{product.discountPercentage} OFF 🌶️
+          </span>
         </div>
         <div className="flex items-center gap-4 max-md:flex-col max-md:items-start">
           <span className="text-4xl font-black tracking-wider">
@@ -106,29 +107,37 @@ function ProductDetails({ product, productId }) {
           </div>
         </div>
       </div>
-      <QuantitySelector increment={increment} decrement={decrement} quantity={quantity} />
+      <QuantitySelector
+        increment={increment}
+        decrement={decrement}
+        quantity={quantity}
+      />
       <div className="space-y-2">
         <h3 className="font-bold">Description</h3>
         <p className="text-sm">{description}</p>
       </div>
       <AddCartButton onClick={onClick} isDisabled={isDisabled} />
     </div>
-  )
+  );
 }
 
 function ImagenGallery({ images, active, setActive }) {
   return (
     <div className="flex gap-4">
       {images.map((img, i) => (
-        <div onClick={() => setActive(img)} className={clsx(
-          "aspect-square h-24 rounded-lg overflow-hidden shadow-md border-2 duration-150 ease-in-out hover:scale-105",
-          active === img ? "border-slate-500" : "border-slate-200"
-        )} key={i}>
+        <div
+          onClick={() => setActive(img)}
+          className={clsx(
+            "aspect-square h-24 overflow-hidden rounded-lg border-2 shadow-md duration-150 ease-in-out hover:scale-105",
+            active === img ? "border-slate-500" : "border-slate-200",
+          )}
+          key={i}
+        >
           <img className="h-full w-full object-cover" src={img} />
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 function QuantitySelector({ increment, decrement, quantity }) {
@@ -145,9 +154,8 @@ function QuantitySelector({ increment, decrement, quantity }) {
         </button>
       </div>
     </div>
-  )
+  );
 }
-
 
 function AddCartButton({ onClick, isDisabled }) {
   return (
@@ -170,7 +178,7 @@ function AddCartButton({ onClick, isDisabled }) {
         </>
       )}
     </button>
-  )
+  );
 }
 
 // Prop-Types
@@ -184,23 +192,23 @@ ProductDetails.propTypes = {
     category: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     rating: PropTypes.number.isRequired,
-    discountPercentage: PropTypes.number.isRequired
-  }).isRequired
-}
+    discountPercentage: PropTypes.number.isRequired,
+  }).isRequired,
+};
 
 QuantitySelector.propTypes = {
   increment: PropTypes.func.isRequired,
   decrement: PropTypes.func.isRequired,
-  quantity: PropTypes.number.isRequired
-}
+  quantity: PropTypes.number.isRequired,
+};
 
 ImagenGallery.propTypes = {
   images: PropTypes.arrayOf(PropTypes.string).isRequired,
   active: PropTypes.string.isRequired,
-  setActive: PropTypes.func.isRequired
-}
+  setActive: PropTypes.func.isRequired,
+};
 
 AddCartButton.propTypes = {
   onClick: PropTypes.func.isRequired,
-  isDisabled: PropTypes.bool.isRequired
-}
+  isDisabled: PropTypes.bool.isRequired,
+};

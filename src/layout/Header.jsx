@@ -5,7 +5,6 @@ import { Link, useLocation } from "react-router-dom";
 
 import Search from "../components/Search";
 import Navbar from "../components/Navbar";
-import BurgerMenu from "../components/BurgerMenu";
 
 export default function Header() {
   const pathname = useLocation().pathname;
@@ -20,9 +19,7 @@ export default function Header() {
         <Navbar />
       </div>
       <div className="flex items-center gap-4 lg:gap-8">
-        {pathname.includes("category") ? (
-          <Search />
-        ) : null}
+        {pathname.includes("category") ? <Search /> : null}
         <Link to="/cart">
           <ShoppingCart
             className={clsx(
@@ -33,7 +30,6 @@ export default function Header() {
             )}
           />
         </Link>
-        <BurgerMenu />
       </div>
     </header>
   );

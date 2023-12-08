@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 export const CartContext = createContext({});
 
-export const CartProvider = ({ children }) => {
+export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
 
@@ -71,7 +71,7 @@ export const CartProvider = ({ children }) => {
       {children}
     </CartContext.Provider>
   );
-};
+}
 
 CartProvider.propTypes = {
   children: PropTypes.node.isRequired,

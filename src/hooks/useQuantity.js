@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const useQuantity = (initialValue) => {
+export function useQuantity(initialValue) {
   const [quantity, setQuantity] = useState(initialValue);
 
   const increment = () => {
@@ -18,4 +18,4 @@ export const useQuantity = (initialValue) => {
     increment,
     decrement,
   };
-};
+}

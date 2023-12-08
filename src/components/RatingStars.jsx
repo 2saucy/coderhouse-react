@@ -1,7 +1,7 @@
 import { Star } from "lucide-react";
 import PropTypes from "prop-types";
 
-const RatingStars = ({ rate }) => {
+export default function RatingStars({ rate }) {
   const maxRating = 5;
 
   return (
@@ -15,10 +15,8 @@ const RatingStars = ({ rate }) => {
       ))}
     </div>
   );
-};
+}
 
 RatingStars.propTypes = {
   rate: PropTypes.number,
 };
-
-export default RatingStars;

@@ -1,7 +1,13 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-const ProductCard = ({ id, images, title, price, discountPercentage }) => {
+export default function ProductCard({
+  id,
+  images,
+  title,
+  price,
+  discountPercentage,
+}) {
   const withoutDiscount = price / (1 - discountPercentage / 100);
 
   return (
@@ -33,7 +39,7 @@ const ProductCard = ({ id, images, title, price, discountPercentage }) => {
       </div>
     </Link>
   );
-};
+}
 
 ProductCard.propTypes = {
   id: PropTypes.number,
@@ -42,5 +48,3 @@ ProductCard.propTypes = {
   price: PropTypes.number,
   discountPercentage: PropTypes.number,
 };
-
-export default ProductCard;

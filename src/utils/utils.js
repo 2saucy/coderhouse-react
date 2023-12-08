@@ -73,5 +73,4 @@ export const capitalizeFirstLetter = (string) => {
 
 export const getPriceWithoutDiscount = (price, discountPercentage) => {
   return (price / (1 - discountPercentage / 100)).toFixed(2);
-}
-
+};

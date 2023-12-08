@@ -4,9 +4,9 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-
 import { db } from "../utils/firebaseConfig";
 import ProductListContainer from "../components/ProductListContainer";
+import { useForm } from "react-hook-form";
 
 export default function HomePage() {
   const [products, setProducts] = useState([]);
@@ -22,7 +22,7 @@ export default function HomePage() {
     infinite: true,
     autoplay: true,
     autoplaySpeed: 3000,
-  }
+  };
 
   useEffect(() => {
     const docRef = collection(db, "products");
@@ -41,95 +41,117 @@ export default function HomePage() {
   }, []);
 
   return (
-    <main className="antialiased">
+    <main className="overflow-x-hidden antialiased">
       <Slider {...sliderSettings}>
         {sliderImages.map((image, i) => (
           <div key={i} className="h-96">
-            <img className="w-full h-full object-cover" src={image} />
+            <img className="h-full w-full object-cover" src={image} />
           </div>
         ))}
       </Slider>
 
       <section className="space-y-4 p-12">
-        <h2 className="text-3xl font-serif italic">Weekly Discounts</h2>
+        <h2 className="font-serif text-3xl italic">Weekly Discounts</h2>
         <ProductListContainer products={bestDiscounts} />
       </section>
 
-      <section className="bg-black flex flex-col md:flex-row">
+      <section className="flex flex-col bg-black md:flex-row">
         <div className="basis-1/2">
-          <img src="./banner-category-electronics.jpg" alt="Electronics Banner" />
+          <img
+            src="./banner-category-electronics.jpg"
+            alt="Electronics Banner"
+          />
         </div>
-        <div className="basis-1/2 text-slate-100 self-center p-8 space-y-4">
+        <div className="basis-1/2 space-y-4 self-center p-8 text-slate-100">
           <h2 className="text-2xl font-bold">Explore our Electronics Deals</h2>
-          <p className="text-lg font-serif">
-            Discover amazing discounts on the latest electronics. From smartphones to laptops,
-            find the best deals on cutting-edge technology.
+          <p className="font-serif text-lg">
+            Discover amazing discounts on the latest electronics. From
+            smartphones to laptops, find the best deals on cutting-edge
+            technology.
           </p>
         </div>
       </section>
 
-      <ContactUsSection />
+      <section className="bg-gray-100 p-12">
+        <div className="container mx-auto">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="mb-4 text-4xl font-bold">Contact Us</h2>
+            <p className="mb-8 text-gray-600">
+              Have questions or feedback? Reach out to us using the form below.
+            </p>
+          </div>
+          <ContactForm />
+        </div>
+      </section>
     </main>
   );
 }
 
-function ContactUsSection() {
+function ContactForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => console.log(data);
+
   return (
-    <section className="bg-gray-100 p-12">
-      <div className="container mx-auto">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-4">Contact Us</h2>
-          <p className="text-gray-600 mb-8">
-            Have questions or feedback? Reach out to us using the form below.
-          </p>
+    <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-lg">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="mb-4">
+          <label htmlFor="name" className="block font-semibold text-gray-600">
+            Your Name
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            {...register("name", { required: "This field is required" })}
+            className="w-full rounded border border-gray-300 p-2"
+            placeholder="Enter your name"
+          />
+          {errors.name && <p className="text-red-500">{errors.name.message}</p>}
         </div>
-        <form className="max-w-lg mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="mb-4">
-              <label htmlFor="name" className="block text-gray-600 font-semibold">
-                Your Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                className="w-full border border-gray-300 p-2 rounded"
-                placeholder="John Doe"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-gray-600 font-semibold">
-                Your Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                className="w-full border border-gray-300 p-2 rounded"
-                placeholder="john@example.com"
-              />
-            </div>
-          </div>
-          <div className="mb-4">
-            <label htmlFor="message" className="block text-gray-600 font-semibold">
-              Your Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              rows="4"
-              className="w-full border border-gray-300 p-2 rounded"
-              placeholder="Write your message here..."
-            />
-          </div>
-          <button
-            type="submit"
-            className="bg-black text-white py-2 px-4 rounded hover:bg-gray-800"
-          >
-            Submit
-          </button>
-        </form>
+        <div className="mb-4">
+          <label htmlFor="email" className="block font-semibold text-gray-600">
+            Your Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            {...register("email", { required: "This field is required" })}
+            className="w-full rounded border border-gray-300 p-2"
+            placeholder="Enter your email"
+          />
+          {errors.email && (
+            <p className="text-red-500">{errors.email.message}</p>
+          )}
+        </div>
       </div>
-    </section>
-  )
+      <div className="mb-4">
+        <label htmlFor="message" className="block font-semibold text-gray-600">
+          Your Message
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          rows="4"
+          {...register("message", { required: "This field is required" })}
+          className="w-full rounded border border-gray-300 p-2"
+          placeholder="Write your message here..."
+        />
+        {errors.message && (
+          <p className="text-red-500">{errors.message.message}</p>
+        )}
+      </div>
+      <button
+        type="submit"
+        className="rounded bg-black px-4 py-2 text-white hover:bg-gray-800"
+      >
+        Submit
+      </button>
+    </form>
+  );
 }

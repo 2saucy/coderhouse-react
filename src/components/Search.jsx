@@ -2,7 +2,7 @@ import { SearchIcon, X } from "lucide-react";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-const Search = () => {
+export default function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [value, setValue] = useState("");
 
@@ -39,6 +39,4 @@ const Search = () => {
       )}
     </div>
   );
-};
-
-export default Search;
+}
